@@ -17,7 +17,17 @@ module.exports = {
       generoMusical: {
         type: DataTypes.STRING, 
         allowNull: true,
-      }
+      }, 
+      discoFK: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Discos',
+          key: 'id',
+      },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+    },
     }, {
       tableName: 'Artistas',
       timestamps: false,

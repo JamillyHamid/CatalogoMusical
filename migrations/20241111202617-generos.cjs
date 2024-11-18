@@ -13,7 +13,17 @@ module.exports = {
       nome: {
         type: DataTypes.STRING,
         allowNull: false,
-      },
+      }, 
+      discoFK: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+         model: 'Discos',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      }
     }, {
       tableName: 'Generos',
       timestamps: false,

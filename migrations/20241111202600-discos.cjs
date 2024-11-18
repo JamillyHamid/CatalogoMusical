@@ -22,17 +22,7 @@ module.exports = {
       capa: {
         type: DataTypes.STRING,
         allowNull: true,
-      },
-      artistaFk: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'Artistas',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-        allowNull: false,
-      },
+      }
     }, {
       tableName: 'Discos',
       timestamps: false,

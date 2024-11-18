@@ -19,5 +19,15 @@ const Faixas = sequelize.define('Faixas', {
   musica: {
     type: DataTypes.STRING, 
     allowNull: true,
+  },
+  discoFk: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: 'Discos',
+      key: 'id',
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+    allowNull: false,
   }
 });

@@ -34,7 +34,7 @@ module.exports = {
         allowNull: false,
       },
     }, {
-      tableName: 'Discos',
+      tableName: 'Faixas',
       timestamps: false,
     });
   },
