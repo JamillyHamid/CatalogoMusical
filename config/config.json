@@ -15,7 +15,7 @@
   },
   "production": {
     "username": "root",
-    "password": "Db_01061327",
+    "passrword": "Db_01061327",
     "database": "catalogomusical",
     "host": "127.0.0.1",
     "dialect": "mysql"

@@ -1,0 +1,124 @@
+<!-- Título centralizado -->
+<h1 class="text-center my-4">Cadastro de Artista</h1>
+
+<form action="/artistas/adicionarArtistas" method="POST" class="p-4 shadow-sm rounded bg-dark text-light">
+    <div class="mb-3">
+        <label for="nome" class="form-label">Nome do Artista</label>
+        <input type="text" id="nome" name="nome" class="form-control bg-secondary text-light"
+            placeholder="Digite o nome do Artista!" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="genero" class="form-label">Gêneros:</label>
+        <div id="generosContainer">
+            <input type="text" class="form-control bg-secondary text-light mb-2" name="generoMusical[]"
+                placeholder="Digite um gênero" required>
+        </div>
+        <button type="button" class="btn btn-outline-light btn-sm" id="addGeneroBtn">+ Gênero</button>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Vincular Discos</label>
+        <div>
+            {{#each discos}}
+            <div class="form-check">
+                <input class="form-check-input bg-dark text-light" type="checkbox" name="discos[]"
+                    value="{{this.discoId}}" id="disco-{{this.discoId}}">
+                <label class="form-check-label text-light" for="disco-{{this.discoId}}">
+                    {{this.titulo}} ({{this.anoLancamento}})
+                </label>
+            </div>
+            {{/each}}
+            <p class="text-muted">Mais nenhum disco disponível para vincular!</p>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <a href="/" class="btn btn-danger">Home</a>
+        <button type="submit" class="btn btn-danger">Cadastrar Artista</button>
+    </div>
+</form>
+
+<script>
+    // Script para adicionar gêneros dinamicamente
+    document.addEventListener('DOMContentLoaded', () => {
+        const generosContainer = document.getElementById('generosContainer');
+        const addGeneroBtn = document.getElementById('addGeneroBtn');
+
+        addGeneroBtn.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'form-control bg-secondary text-light mb-2';
+            input.name = 'genero[]';
+            input.placeholder = 'Digite um gênero';
+            input.required = true;
+            generosContainer.appendChild(input);
+        });
+    });
+</script>
+
+<style>
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #000;
+    }
+
+    h1 {
+        color: #fff;
+    }
+
+    .text-muted {
+        color: #fff !important;
+    }
+
+    ::placeholder {
+        color: #fff !important;
+    }
+
+    .form-control {
+        border: 1px solid #333;
+        color: #fff;
+    }
+
+    .form-control:focus {
+        border-color: #dc3545;
+        box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+    }
+
+    .btn-danger:hover {
+        background-color: #b52b38;
+    }
+
+    .bg-dark {
+        background-color: #222 !important;
+    }
+
+    .bg-secondary {
+        background-color: #333 !important;
+    }
+
+    .text-light {
+        color: #f8f9fa !important;
+    }
+
+    .text-muted {
+        color: #bbb !important;
+    }
+
+    ::placeholder {
+        color: #ccc;
+    }
+
+    .form-check-input:checked {
+        background-color: #dc3545 !important;
+        border-color: #dc3545 !important;
+    }
+</style>

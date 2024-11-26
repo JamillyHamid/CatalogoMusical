@@ -1,0 +1,166 @@
+<!-- Título centralizado -->
+<h1 class="text-center my-4">Cadastro de Disco</h1>
+
+<form action="/discos/adicionarDiscos" method="POST" enctype="multipart/form-data"
+    class="p-4 shadow-sm rounded bg-dark text-light">
+
+    <div class="mb-3">
+        <label for="capa" class="form-label">Capa (imagem)</label>
+        <input type="file" id="capa" name="capa" accept="image/jpeg, image/png"
+            class="form-control file-input bg-secondary text-light" required>
+        <small class="form-text text-muted">Apenas arquivos JPEG e PNG são permitidos.</small>
+    </div>
+
+    <div class="mb-3">
+        <label for="titulo" class="form-label">Título</label>
+        <input type="text" id="titulo" name="titulo" class="form-control bg-secondary text-light"
+            placeholder="Digite o título do disco que deseja cadastrar!" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="anoLancamento" class="form-label">Ano de Lançamento</label>
+        <input type="text" id="anoLancamento" name="anoLancamento" class="form-control bg-secondary text-light"
+            placeholder="Digite o ano de lançamento do disco!" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="genero" class="form-label">Gêneros:</label>
+        <div id="generosContainer">
+            <input type="text" class="form-control bg-secondary text-light mb-2" name="genero[]" placeholder="Digite um gênero" required>
+        </div>
+        <button type="button" class="btn btn-outline-light btn-sm" id="addGeneroBtn">+ Gênero</button>
+    </div>
+
+    <div class="mb-3">
+        <label for="audio" class="form-label">Áudio da Faixa</label>
+        <input type="file" id="audio" name="audio" accept="audio/mp3, audio/ogg, audio/wav"
+            class="form-control file-input bg-secondary text-light" required>
+        <small class="form-text text-muted">Selecione um arquivo de áudio para a faixa.</small>
+    </div>
+
+    <div class="mb-3">
+        <label for="nome" class="form-label">Nome da Faixa</label>
+        <input type="text" id="nome" name="nome" class="form-control bg-secondary text-light"
+            placeholder="Digite o nome da Faixa!" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="duracao" class="form-label">Duração da Faixa</label>
+        <input type="text" id="duracao" name="duracao" class="form-control bg-secondary text-light"
+            placeholder="A duração será calculada automaticamente" readonly>
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <a href="/" class="btn btn-danger">Home</a>
+        <button type="submit" class="btn btn-danger">Cadastrar Disco</button>
+    </div>
+
+</form>
+
+<script>
+    document.getElementById('audio').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const audio = new Audio(URL.createObjectURL(file));
+            audio.onloadedmetadata = function () {
+                const duration = audio.duration;
+                const minutes = Math.floor(duration / 60);
+                const seconds = Math.floor(duration % 60);
+                document.getElementById('duracao').value = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+            };
+        }
+    });
+
+    // Script para adicionar gêneros dinamicamente
+    document.addEventListener('DOMContentLoaded', () => {
+        const generosContainer = document.getElementById('generosContainer');
+        const addGeneroBtn = document.getElementById('addGeneroBtn');
+
+        addGeneroBtn.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'form-control bg-secondary text-light mb-2';
+            input.name = 'genero[]';
+            input.placeholder = 'Digite um gênero';
+            input.required = true;
+            generosContainer.appendChild(input);
+        });
+    });
+</script>
+
+<style>
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #000;
+    }
+
+    h1 {
+        color: #fff;
+    }
+
+    .text-muted {
+        color: #fff !important;
+    }
+
+    .form-control {
+        border: 1px solid #333;
+        color: #fff;
+    }
+
+    .form-control:focus {
+        border-color: #dc3545;
+        box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+    }
+
+    .btn-danger:hover {
+        background-color: #b52b38;
+    }
+
+    .btn-outline-light {
+        border: 1px solid #fff;
+        color: #fff;
+    }
+
+    .btn-outline-light:hover {
+        border-color: #dc3545;
+        color: #dc3545;
+    }
+
+    .bg-dark {
+        background-color: #222 !important;
+    }
+
+    .bg-secondary {
+        background-color: #333 !important;
+    }
+
+    .text-light {
+        color: #f8f9fa !important;
+    }
+
+    ::placeholder {
+        color: #fff !important;
+    }
+
+    /* Adicionado hover com borda vermelha no botão */
+    #addGeneroBtn:hover {
+        border-color: #dc3545 !important;
+    }
+
+    /* Campos de upload com borda personalizada */
+    .file-input {
+        border: 1px solid #555;
+    }
+
+    .file-input:hover {
+        border-color: #dc3545 !important;
+    }
+</style>

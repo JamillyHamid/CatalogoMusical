@@ -1,88 +1,88 @@
+import bodyParser from 'body-parser';
 import flash from 'connect-flash';
+import EventEmitter from 'events';
 import express from 'express';
 import { engine } from 'express-handlebars';
 import session from 'express-session';
-import methodOverride from 'method-override';
+import methodOverrride from 'method-override';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { initialize, sequelize } from './dbconfig.js';
-//import candidato from './routes/candidato.js';
-//import empresa from './routes/empresa.js';
+import { initialize, sequelize } from './dbConfig.js';
+import artista from './routes/artista.js';
+import discos from './routes/discos.js';
 import index from './routes/index.js';
 
 const app = express();
 
-app.use(methodOverride('_method'));
+app.use(methodOverrride('_method'));
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+//Configurações do app
+    //Sessão
+    app.use(session({
+        secret: 'fsnfosnfibuingsbgsngjsnvjbnsbusnvsnjbsj',
+        resave: false,
+        saveUnitialized: true,
+        cookie: { secure: false}
+    }));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+    app.use(flash());
+
+    //Middleware para passar as informações de sessão e falsh para os arquivos views
+    app.use((req, res, next) =>{
+        res.locals.success_msg = req.flash('success_msg');
+        res.locals.error_msg = req.flash('error_msg');
+        res.locals.user = req.session.user;
+        next();
+    });
+
+    // Middleware para o passar o body
+    app.use(express.json());
+    app.use(express.urlencoded({ extendd: true }));
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(bodyParser.json());
 
     // Handlebars
     app.engine('handlebars', engine({
         runtimeOptions: {
-            allowProtoPropertiesByDefault: true,
+            allowProtoMethodsByDefault: true,
             allowProtoMethodsByDefault: true,
         },
         helpers: {
-            formatTelefone: function(telefone) {
-                if (!telefone) return telefone;
-    
-                telefone = telefone.toString();
-    
-                if (telefone.length === 10) {
-                    return `(${telefone.substring(0, 2)}) ${telefone.substring(2, 6)}-${telefone.substring(6)}`;
-                } else if (telefone.length === 11) {
-                    return `(${telefone.substring(0, 2)}) ${telefone.substring(2, 7)}-${telefone.substring(7)}`;
-                } else {
-                    return telefone;
-                }
-            },
-            formatCpf: function formatarCPF(cpf) {
-                cpf = cpf.replace(/\D/g, '');
-                if (cpf.length === 11) {
-                    return cpf.replace(/(\d{3})(\d)/, '$1.$2')
-                               .replace(/(\d{3})(\d)/, '$1.$2')
-                               .replace(/(\d{3})(\d{2})$/, '$1-$2');
-                }
-                return cpf;
-            },
-            formatCNPJ: function(cnpj) {
-                if (!cnpj) return '';
-                cnpj = cnpj.replace(/\D/g, '');
-                return cnpj.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
-            }
+            //Caso tenha alguma formatação especifica a ser declarada
         }
     }));
+
+    //Acesso as Views
     app.set('view engine', 'handlebars');
     app.set('views', path.join(__dirname, 'views'));
 
-   
+    //Inicia a conexão do banco de dados MySql e realiza a sincronização com as mesmas
     async function initializeDatabase() {
         try {
-            await initialize();  
-            await sequelize.sync();  
-            console.log('Banco de dados MySQL conectado e tabelas sincronizadas com sucesso.');
-        } catch (error) {
-            console.error('Erro ao inicializar o banco de dados:', error);
+            await initialize();
+            await sequelize.sync();
+            console.log("Muito bom, banco de dados MySql conectado e tabelas sincronizadas com sucesso!")
+        } catch (error){
+            console.error('Erro ao iniciar a conexão com o banco de dados,' , error);
             process.exit(1);
         }
     }
 
-  
-app.use(express.static('public'));
+    //Arquivos estáticos
+    app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+    app.use(express.static('public'));
 
+    //Rotas
+    app.use('/', index);
+    app.use('/discos', discos);
+    app.use('/artistas', artista);
 
-app.use('/', index);
-//app.use('/candidato', candidato);
-//app.use('/empresa', empresa);
-
-
+//Liberar Servidor
 const PORT = 8081;
-app.listen(PORT, async () => {
+app.listen(PORT, async () =>{
     await initializeDatabase();
-    console.log("Servidor rodando na porta 8081!");
+    console.log("Perfeito, servidor rodando na porta:" , PORT);
 });

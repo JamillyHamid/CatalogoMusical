@@ -1,0 +1,142 @@
+<!-- Título centralizado -->
+<h1 class="text-center my-4">Editar Artista</h1>
+
+<form action="/artistas/editarArtistas/{{artista.artistaId}}" method="POST" class="p-4 shadow-sm rounded bg-dark text-light">
+    <!-- Nome do Artista -->
+    <div class="mb-3">
+        <label for="nome" class="form-label">Nome do Artista</label>
+        <input 
+            type="text" 
+            id="nome" 
+            name="nome" 
+            class="form-control bg-secondary text-light" 
+            value="{{artista.nomeArtista}}" 
+            placeholder="Digite o nome do artista"
+            required>
+    </div>
+
+    <!-- Gêneros Musicais -->
+    <div class="mb-3">
+        <label for="generoMusical" class="form-label">Gêneros Musicais</label>
+        <select 
+            id="generoMusical" 
+            name="generoMusical[]" 
+            class="form-control bg-secondary text-light" 
+            multiple 
+            required>
+            {{#each generos}}
+            <option 
+                value="{{this}}" 
+                {{#if (contains ../artista.generoMusical this)}}selected{{/if}}>
+                {{this}}
+            </option>
+            {{/each}}
+        </select>
+        <small class="form-text text-muted">Segure <strong>Ctrl</strong> (ou <strong>Cmd</strong> no Mac) para selecionar múltiplos gêneros.</small>
+    </div>
+
+    <!-- Discos Associados -->
+    <div class="mb-3">
+        <label class="form-label">Discos Associados</label>
+        <div>
+            {{#each discos}}
+            <div class="form-check">
+                <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    name="discos[]" 
+                    value="{{this.discoId}}" 
+                    id="disco-{{this.discoId}}"
+                    {{#if this.associado}}checked{{/if}}>
+                <label 
+                    class="form-check-label" 
+                    for="disco-{{this.discoId}}">
+                    {{this.titulo}}
+                </label>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+
+    <!-- Botões -->
+    <div class="d-flex justify-content-between">
+        <a href="/" class="btn btn-danger">Cancelar</a>
+        <button type="submit" class="btn btn-danger">Salvar Alterações</button>
+    </div>
+</form>
+
+<script>
+    // Script para adicionar os gêneros dinamicamente
+    const generos = [
+        'Pop', 'Rock', 'Hip-hop', 'Jazz', 'Classical', 'Blues', 'Reggae', 'Electronic', 
+        'Country', 'Soul', 'R&B', 'Funk', 'Metal', 'Ska', 'Punk', 'Gospel', 'Disco', 
+        'Techno', 'House', 'Alternative', 'Folk', 'Latin', 'K-pop', 'Indie', 'Opera',
+    ];
+
+    const selectGenero = document.getElementById('generoMusical');
+
+    generos.forEach(genero => {
+        const option = document.createElement('option');
+        option.value = genero;
+        option.textContent = genero;
+        selectGenero.appendChild(option);
+    });
+</script>
+
+<style>
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #000;
+    }
+
+    h1 {
+        color: #fff;
+    }
+
+    .text-muted {
+        color: #fff !important;
+    }
+
+    .form-control {
+        border: 1px solid #333;
+        color: #fff;
+    }
+
+    .form-control:focus {
+        border-color: #dc3545;
+        box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+    }
+
+    .btn-danger:hover {
+        background-color: #b52b38;
+    }
+
+    .bg-dark {
+        background-color: #222 !important;
+    }
+
+    .bg-secondary {
+        background-color: #333 !important;
+    }
+
+    .text-light {
+        color: #f8f9fa !important;
+    }
+
+    ::placeholder {
+        color: #fff !important;
+    }
+
+    .form-check-input:checked {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+</style>

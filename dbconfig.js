@@ -1,35 +1,36 @@
-import { Sequelize } from 'sequelize';
+import { Sequelize } from "sequelize";
 
 const dbConfig = {
-  host: 'localhost',
-  user: 'root',
-  password: 'Db_01061327',
-  database: 'catalogomusical',
-  dialect: 'mysql'
+    host: 'localhost',
+    user: 'root',
+    password: 'Db_01061327',
+    database: 'catalogomusical',
+    dialect: 'mysql'
 };
 
 const sequelize = new Sequelize(dbConfig.database, dbConfig.user, dbConfig.password, {
-  host: dbConfig.host,
-  dialect: dbConfig.dialect
+    host: dbConfig.host,
+    dialect: dbConfig.dialect
 });
 
-export async function initialize() {
-  try {
-    await sequelize.authenticate();
-    console.log('Conexão com o banco de dados MySQL estabelecida com sucesso.');
-  } catch (error) {
-    console.error('Erro ao conectar ao banco de dados:', error);
-    throw error;
-  }
+export async function initialize () {
+    try {
+        await sequelize.authenticate();
+        console.log('Conexão com o banco de dados MySQL foi estabelicida com sucesso.');
+    } catch (error){
+        console.error('Erro ao conectar com o banco de dados:', error);
+        throw error;
+    }
 }
 
 export async function close() {
-  try {
-    await sequelize.close();
-    console.log('Conexão com o banco de dados MySQL fechada com sucesso.');
-  } catch (error) {
-    console.error('Erro ao fechar a conexão:', error);
-  }
+    try {
+        await sequelize.close();
+        console.log('Conexão com o banco de dados MySQL fechada com sucesso.');
+    } catch (error) {
+        console.error('Erro ao fechar a conexão com o banco de dados:', error);
+    }
 }
 
 export { sequelize };
+    
